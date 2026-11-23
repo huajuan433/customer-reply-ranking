@@ -429,6 +429,17 @@ def load_or_scan(force: bool = False, cfg: dict | None = None) -> list[dict]:
     return rows
 
 
+def demo_rows() -> list[dict]:
+    """返回完全虚构的演示数据；不会读取微信数据库或写入用户数据。"""
+    now = datetime.now()
+    samples = [("陈总-设备采购报价",47,2,2,0),("林经理-年度续费确认",39,12,1,0),("周女士-定制方案沟通",31,60,1,0),("王主管-试用账号跟进",24,180,1,0),("赵先生-展会名片初联",19,360,0,1),("刘总-样品寄送确认",16,720,0,1),("何经理-合同条款沟通",14,960,0,1),("孙女士-预算审批进度",12,1320,0,1),("高工-接口方案评估",10,1560,0,1),("黄总-季度采购计划",9,1920,0,1),("郑经理-售后续费咨询",8,2280,0,1),("何女士-门店开通申请",7,2880,0,1),("吴主管-培训排期确认",6,3360,0,1),("谢总-报价单补充资料",5,4320,0,1),("许经理-竞品信息交流",4,5760,0,1),("唐女士-活动报名咨询",3,7200,0,1),("冯先生-资料下载回访",2,9600,0,1),("罗经理-初次需求了解",1,12000,0,1)]
+    rows = []
+    for rank, (name, replies, minutes, recent, mine) in enumerate(samples, 1):
+        ts = (now - timedelta(minutes=minutes)).timestamp()
+        rows.append({"name":name,"username":f"demo_{rank:02d}","replies":replies,"recent30":recent,"last_time":datetime.fromtimestamp(ts).strftime("%Y-%m-%d %H:%M"),"last_ts":ts,"last_text":"演示数据：客户正在沟通中","replied":True,"my_msgs":mine,"my_last_ts":ts-1800 if mine else 0,"my_last_time":datetime.fromtimestamp(ts-1800).strftime("%Y-%m-%d %H:%M") if mine else "","my_last_text":"演示数据：已发送跟进消息" if mine else "","rank":rank})
+    return rows
+
+
 # ----------------------- 客户详情：按需读某个人的消息 -----------------------
 # 只为侧边栏的互动时间线服务：常驻一个数据库句柄，单个会话 ~0.07s，缓存 5 分钟。
 _READER: dict = {"data": None, "wxid": ""}
@@ -2538,6 +2549,7 @@ def main():
     ap.add_argument("--port", type=int, default=None, help=f"服务端口（默认 {PORT}）")
     ap.add_argument("--no-browser", action="store_true", help="仅启动本地服务，不打开外部浏览器")
     ap.add_argument("--dry-run", action="store_true", help="只打印自动化步骤，不实际按键（自测用）")
+    ap.add_argument("--demo", action="store_true", help="使用虚构演示数据，不读取微信数据库")
     ap.add_argument("--rule", choices=["number_prefix", "has_remark", "keyword"],
                     help="设置客户识别规则并保存到 config.json")
     ap.add_argument("--keyword", default=None, help="配合 --rule keyword 使用的关键词")
@@ -2559,9 +2571,13 @@ def main():
     print(f"[*] 当前客户口径: {cfg.get('customer_rule')}"
           + (f" / 关键词 {cfg.get('customer_keyword')}" if cfg.get("customer_rule") == "keyword" else ""))
 
-    if args.update:
-        update_snapshot(cfg)
-    rows = load_or_scan(force=args.update or args.rescan, cfg=cfg)
+    if args.demo:
+        rows = demo_rows()
+        print(f"[*] 演示模式：使用 {len(rows)} 条虚构客户数据，不读取微信数据库")
+    else:
+        if args.update:
+            update_snapshot(cfg)
+        rows = load_or_scan(force=args.update or args.rescan, cfg=cfg)
     html = build_html(rows, port, cfg)
     HTML_OUT.write_text(html, encoding="utf-8")
     print(f"[+] 排行榜网页: {HTML_OUT}")

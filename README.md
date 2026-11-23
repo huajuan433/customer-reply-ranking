@@ -24,6 +24,16 @@
 2. 双击 `初始化.bat` 安装依赖并完成首次设置。
 3. 以后双击 `客户回复排行榜.bat` 启动应用。
 
+## 演示模式（无需读取微信数据）
+
+如果只是想查看界面或制作截图，可以运行：
+
+```powershell
+python reply_ranking.py --demo --desktop
+```
+
+演示模式使用 18 条完全虚构的客户数据，不读取微信数据库，也不会改动本机聊天数据。
+
 也可以直接下载 Releases 页面中的 Windows 一键安装包：
 
 <https://github.com/huajuan433/customer-reply-ranking/releases/latest>
