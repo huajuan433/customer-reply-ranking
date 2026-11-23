@@ -1,0 +1,7 @@
+output/
+tools/Moect/app/DataBase/
+tools/Moect/wx4_keys.json
+__pycache__/
+*.pyc
+*.zip
+.workbuddy/

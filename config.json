@@ -1,0 +1,86 @@
+{
+  "wxid": "auto",
+  "customer_rule": "number_prefix",
+  "customer_keyword": "",
+  "blacklist": "常青藤|别联系|不联系|转移-|删除|删\\d|测试|广告|群发助手",
+  "port": 8765,
+  "score": {
+    "weights": {
+      "recency": 40,
+      "reply": 30,
+      "volume": 15
+    },
+    "half_life_days": 30,
+    "volume_cap": 100,
+    "tag_weights": {
+      "高意向": 20,
+      "老客户": 15,
+      "中意向": 8,
+      "低意向": -10,
+      "沉默": -15
+    }
+  },
+  "tags": {},
+  "tag_colors": {
+    "高意向": "#0f9d58",
+    "中意向": "#2563eb",
+    "低意向": "#8a9099",
+    "已报价": "#7c3aed",
+    "老客户": "#b45309",
+    "价格敏感": "#db2777",
+    "同行": "#64748b",
+    "沉默": "#94a3b8"
+  },
+  "statuses": [
+    {
+      "name": "待激活",
+      "color": "#8a9099"
+    },
+    {
+      "name": "跟进中",
+      "color": "#2563eb"
+    },
+    {
+      "name": "已转化",
+      "color": "#0f9d58"
+    },
+    {
+      "name": "暂时搁置",
+      "color": "#d97706"
+    },
+    {
+      "name": "已流失",
+      "color": "#d93a2b"
+    }
+  ],
+  "status": {},
+  "templates": [],
+  "template_cats": [
+    "首次激活",
+    "跟进中",
+    "促单",
+    "售后"
+  ],
+  "todo": {
+    "manual": [],
+    "done": {},
+    "snooze": {},
+    "today": {
+      "date": "",
+      "users": []
+    },
+    "rule": {
+      "enabled": true,
+      "min_days": 3,
+      "min_score": 45,
+      "limit": 15,
+      "skip_status": [
+        "已转化",
+        "已流失",
+        "暂时搁置"
+      ]
+    }
+  },
+  "manual": {},
+  "notes": {}
+}
