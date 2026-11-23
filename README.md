@@ -38,6 +38,8 @@ python reply_ranking.py --demo --desktop
 
 <https://github.com/huajuan433/customer-reply-ranking/releases/latest>
 
+![客户回复排行榜 Windows 本地主界面演示](./docs/screenshot-main.png)
+
 ## 注意事项
 
 - 数据只在本机处理，不会自动上传聊天内容。
